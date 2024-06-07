@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     
-    <title>Login - My blog </title>
+    <title>Login - <?= APP_NAME?>  </title>
 
     
 
@@ -33,14 +33,14 @@
     </style>
     
     <!-- Custom styles for this template -->
-    <link href="blog/assets/css/signin.css" rel="stylesheet" type="text/css">
+    <link href="assets\css\signin.css" rel="stylesheet" type="text/css">
   </head>
   <body class="text-center">
     
 <main class="form-signin">
   <form method="post">
     <a href="home">
-    <img class="mb-4" src="blog/public/assets/images/correctbg.png" alt="" width="72" height="57">
+    <img class="mb-4" src="assets/images/correctbg.png" alt="" width="72" height="57">
     </a>
 
    

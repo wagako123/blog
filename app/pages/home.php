@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     
-    <title>Home · My Blog</title>
+    <title>Home ·<?= APP_NAME?> </title>
 
 
     
@@ -30,7 +30,7 @@
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="home" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-          <img src="<?=ROOT?>assets/images/correctbg.png" width="32" height="40" alt="">
+          <img src="<?=ROOT?>/assets/images/correctbg.png" width="32" height="40" alt="">
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
