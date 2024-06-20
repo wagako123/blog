@@ -1,39 +1,65 @@
 <?php
+create_tables();
+ function create_tables (){
 
-// function create_tables (){
 
+    $string="mysql:hostname=localhost;";
+    $con = new PDO($string, DBUSER ,DBPASS);
 
-$string="mysql:hostname=localhost;";
-try{
-$con = new PDO($string, DBUSER ,DBPASS);
-echo "you have connected";
-}
-catch(PDOException $e)
-{
-    $error_message=$e ->getMessage();
-    echo $error_message;
-    exit();
+    $query= "create database if not exists ". DBNAME;
+    $stm=$con-> prepare ($query);
+    $stm->execute();
 
-}
+    $query= "use ". DBNAME;
+    $stm=$con-> prepare ($query);
+    $stm->execute();
+// user table
+    $query= "create table if not exists users(
 
-// $query= "create database if not exists".DBNAME;
-// $stm=$con-> prepare ($query);
-// $stm->execute();
+            id int primary key auto_increment,
+            username varchar(50) not null,
+            email varchar(100) not null,
+            password varchar(255) not null,
+            image varchar(1024) null,
+            date datetime default current_timestamp,
+            role varchar(10) not null,
 
-// $query= "create table if not exists users(
+            key username (username),
+            key email (email)
+        )";
+    $stm = $con-> prepare ($query);
+    $stm->execute();
 
-//     id int primary key auto_incriment,
-//     user varchar (50) not null,
-//     email varchar (100) not null,
-//     password varchar(255) not null,
-//     image varchar (1024) null,
-//     date datetime default current_timestamp,
-//     role varchar(10) not null,
+// categories table
+    $query= "create table if not exists categories(
 
-//     key email (email),
-//     key username (username)
-//     )";
-// $stm=$con-> prepare ($query);
-// $stm->execute();
+            id int primary key auto_increment,
+            category varchar(50) not null,
+            slug varchar(100) not null,
+            disabled tinyint default 0
+        
+        )";
+    $stm=$con-> prepare ($query);
+     $stm->execute();
+            // posts table
+     $query= "create table if not exists posts(
 
-//}
+     id int primary key auto_increment,
+     user_id int auto_increment,
+     category_id int auto_increment,
+     title varchar (100) not null,
+     content text null,
+     image varchar (1024) null,
+     date datetime default current_timestamp,
+     slug varchar(10) not null,
+    
+     key user_id (user_id),
+     key category_id (category_id),
+     key title (title),
+     key date (date),
+     key username (username)
+ )";
+$stm=$con-> prepare ($query);
+$stm->execute();
+
+ }
