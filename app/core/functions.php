@@ -1,4 +1,38 @@
 <?php
+//query
+function query(string $query, array $data =[])
+{
+    
+    $string="mysql:hostname=localhost;";
+    $con = new PDO($string, DBUSER ,DBPASS);
+
+    $stm=$con-> prepare ($query);
+    $stm->execute($data);
+
+    $result=$stm->fetchAll(PDO::FETCH_ASSOC);
+    if(is_array($result) && !empty($result))
+    {
+        return $result;
+    }else
+    return false;
+}
+
+//redirect
+
+function redirect($page){
+    header('Location:'.$page);
+    die;
+}
+
+//placeholder values
+function old_value($key){
+    if(!empty($_POST[$key]))
+    return $_POST [$key];
+
+    return "";
+}
+
+//create tables
 create_tables();
  function create_tables (){
 

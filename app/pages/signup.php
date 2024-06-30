@@ -1,3 +1,60 @@
+<?php
+
+if(!empty($_POST))
+{
+
+  //validate
+  $errors=[];
+
+  //errors
+
+  if(empty($_POST['username'])){
+    $errors['username']="username required";
+  }else 
+  if(!preg_match("^[/a-zA-Z1-9]+$/^", $_POST['username'])){
+    $errors['username'] = "username cannot have spaces";
+  }else
+
+  //$query = "select id from users where email = :email limit 1";
+  //$email = query($query, ['email'=>$_POST['email']]);
+  // email search for existing email does not work because Query function in function does 
+  // not allow for null arrays while the tutorial dictates that it should work anyway
+
+  if(empty($_POST['email'])){
+    $errors['email']="email required";
+  }else
+  if($email){
+    $errors['email']="email is already in use";
+  }
+  
+  if(empty($_POST['password'])){
+    $errors['password']="password required";
+  }else
+  if(strlen($_POST['password'])<8){
+    $errors['password']="password must be 8 characters long";
+  }if($_POST['password'] !== ["retype_password"]){
+    $errors['password']="passwords do not match";
+  } if(empty($_POST['terms'])){
+    $errors['terms']="Please accept the terms and conditions";
+  }
+
+  if (empty($errors)){
+    //save to database
+    $data=[];
+    $data['username']= $_POST['username'];
+    $data['email']   = $_POST['email'];
+    $data['role']    = "user";
+    $data['password']= password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+
+    $query=" insert into users(username,email,password,role) values(:username,:email,:password,:role)";
+    query($query,$data);
+
+    redirect('login');
+ }
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -43,20 +100,33 @@
     </a>
     <h1 class="h3 mb-3 fw-normal">Please create an account</h1>
 
+    <?php if (!empty($errors)):?>
+      <div class="alert alert-danger">Please fix errors below </div>
+      <?php endif;?>
     <div class="form-floating">
-      <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+
+      <input value="<?=old_value("email")?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
     </div>
+    <?php if (!empty($errors['email'])):?>
+      <div class="alert alert-danger"><?=$errors['email'] ?> </div>
+      <?php endif;?>
     <div class="form-floating">
-      <input name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
+      <input value="<?=old_value("username")?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
       <label for="floatingInput">Username</label>
     </div>
+    <?php if (!empty($errors['username'])):?>
+      <div class="alert alert-danger"><?=$errors['username'] ?> </div>
+      <?php endif;?>
     <div class="form-floating">
-      <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
+    <?php if (!empty($errors['password'])):?>
+      <div class="alert alert-danger"><?=$errors['password'] ?> </div>
+      <?php endif;?>
     <div class="form-floating">
-      <input name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Re-type Password</label>
     </div>
 
@@ -67,6 +137,9 @@
         <input type="checkbox" value="1"> Accept terms and conditions
       </label>
     </div>
+    <?php if (!empty($errors['terms'])):?>
+      <div class="alert alert-danger"><?=$errors['terms'] ?> </div>
+      <?php endif;?>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Create account</button>
     <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
   </form>

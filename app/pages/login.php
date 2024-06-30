@@ -1,3 +1,20 @@
+<?php
+
+// if(!empty($_POST))
+// {
+
+//   //validate
+//   $errors=[];
+
+//   if (empty($errors)){
+//     //save to database
+
+//     $query=" insert into users";
+//     query();
+//  }
+// }
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
