@@ -11,15 +11,15 @@ if(!empty($_POST))
   if(empty($_POST['username'])){
     $errors['username']="username required";
   }else 
-  if(!preg_match("^[/a-zA-Z1-9]+$/^", $_POST['username'])){
+  if(!preg_match("/^[a-zA-Z]+$/", $_POST['username'])){
     $errors['username'] = "username cannot have spaces";
   }else
 
-  //$query = "select id from users where email = :email limit 1";
-  //$email = query($query, ['email'=>$_POST['email']]);
+  $query = "select id from users where email = :email limit 1";
+  $email = query($query, ['email'=>$_POST['email']]);
   // email search for existing email does not work because Query function in function does 
   // not allow for null arrays while the tutorial dictates that it should work anyway
-
+//  passwordone
   if(empty($_POST['email'])){
     $errors['email']="email required";
   }else
@@ -32,11 +32,12 @@ if(!empty($_POST))
   }else
   if(strlen($_POST['password'])<8){
     $errors['password']="password must be 8 characters long";
-  }if($_POST['password'] !== ["retype_password"]){
+  }if($_POST['password'] !== $_POST["retype_password"]){
     $errors['password']="passwords do not match";
-  } if(empty($_POST['terms'])){
-    $errors['terms']="Please accept the terms and conditions";
-  }
+  } 
+  // if(empty($_POST['terms'])){
+  //   $errors['terms']="Please accept the terms and conditions";
+  // }
 
   if (empty($errors)){
     //save to database
@@ -105,28 +106,28 @@ if(!empty($_POST))
       <?php endif;?>
     <div class="form-floating">
 
-      <input value="<?=old_value("email")?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input value="<?=old_value("email")?>" name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
     </div>
     <?php if (!empty($errors['email'])):?>
       <div class="alert alert-danger"><?=$errors['email'] ?> </div>
       <?php endif;?>
     <div class="form-floating">
-      <input value="<?=old_value("username")?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
+      <input value="<?=old_value("username")?>" name="username" type="text" class="form-control" id="username" placeholder="username">
       <label for="floatingInput">Username</label>
     </div>
     <?php if (!empty($errors['username'])):?>
       <div class="alert alert-danger"><?=$errors['username'] ?> </div>
       <?php endif;?>
     <div class="form-floating">
-      <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="password" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
     <?php if (!empty($errors['password'])):?>
       <div class="alert alert-danger"><?=$errors['password'] ?> </div>
       <?php endif;?>
     <div class="form-floating">
-      <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="retyped_password" placeholder="Password">
       <label for="floatingPassword">Re-type Password</label>
     </div>
 
@@ -134,7 +135,7 @@ if(!empty($_POST))
 
     <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" value="1"> Accept terms and conditions
+        <input type="terms" value="1"> Accept terms and conditions
       </label>
     </div>
     <?php if (!empty($errors['terms'])):?>
