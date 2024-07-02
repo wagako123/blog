@@ -3,7 +3,7 @@
 function query(string $query, array $data =[])
 {
     
-    $string="mysql:hostname=".DBHOST.";dbname=".DBNAME;
+    $string="mysql:hostname=localhost;";
     $con = new PDO($string, DBUSER ,DBPASS);
 
     $stm=$con-> prepare ($query);
