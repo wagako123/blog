@@ -133,14 +133,15 @@ if(!empty($_POST))
 
     <div class="my-2"><a href="login">Login to your account</a></div>
 
-    <div class="checkbox mb-3">
+    <!-- <div class="checkbox mb-3">
       <label>
-        <input type="terms" value="1"> Accept terms and conditions
+        <input name="terms" type="checkbox" value="remember-me"> Accept terms and conditions
       </label>
-    </div>
-    <?php if (!empty($errors['terms'])):?>
+    </div>-->
+    <?php 
+    //if (!empty($errors['terms'])):?>
       <div class="alert alert-danger"><?=$errors['terms'] ?> </div>
-      <?php endif;?>
+      <?php //endif;?> 
     <button class="w-100 btn btn-lg btn-primary" type="submit">Create account</button>
     <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
   </form>
