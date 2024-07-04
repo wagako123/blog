@@ -11,12 +11,12 @@ if(!empty($_POST))
   if(empty($_POST['username'])){
     $errors['username']="username required";
   }else 
-  if(!preg_match("^[/a-zA-Z1-9]+$/^", $_POST['username'])){
+  if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
     $errors['username'] = "username cannot have spaces";
-  }else
+  }
 
-  //$query = "select id from users where email = :email limit 1";
-  //$email = query($query, ['email'=>$_POST['email']]);
+  $query = "select id from users where email = :email limit 1";
+  $email = query($query, ['email'=>$_POST['email']]);
   // email search for existing email does not work because Query function in function does 
   // not allow for null arrays while the tutorial dictates that it should work anyway
 
@@ -32,7 +32,7 @@ if(!empty($_POST))
   }else
   if(strlen($_POST['password'])<8){
     $errors['password']="password must be 8 characters long";
-  }if($_POST['password'] !== ["retype_password"]){
+  }if($_POST['password'] !== $_POST["retype_password"]){
     $errors['password']="passwords do not match";
   } if(empty($_POST['terms'])){
     $errors['terms']="Please accept the terms and conditions";
@@ -132,15 +132,14 @@ if(!empty($_POST))
 
     <div class="my-2"><a href="login">Login to your account</a></div>
 
-    <!-- <div class="checkbox mb-3">
+    <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" value="1"> Accept terms and conditions
+        <input name="terms" type="checkbox" value="1"> Accept terms and conditions
       </label>
-    </div>-->
-    <?php 
-    //if (!empty($errors['terms'])):?>
+    </div>
+    <?php if (!empty($errors['terms'])):?>
       <div class="alert alert-danger"><?=$errors['terms'] ?> </div>
-      <?php //endif;?> 
+      <?php endif;?>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Create account</button>
     <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
   </form>
