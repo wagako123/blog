@@ -1,18 +1,33 @@
 <?php
 
-// if(!empty($_POST))
-// {
+if(!empty($_POST)){
+//validate
+$errors=[];
 
-//   //validate
-//   $errors=[];
+$query=" select * from users where email = :email limit 1";
+$row=query($query,['email'=> $_POST['email']]);
 
-//   if (empty($errors)){
-//     //save to database
 
-//     $query=" insert into users";
-//     query();
-//  }
-// }
+if ($row){
+  $data=[];
+  if(password_verify($_POST['password'], $row[0]['password'] ))
+  {
+    //grant access
+
+  authenticate($row[0]);
+ 
+  redirect('admin');
+
+}else{
+  $errors['email']="wrong email or password";
+}
+}
+
+else{
+  $errors['email']="wrong email or password";
+}
+}
+
 ?>
 
 <!doctype html>
@@ -62,6 +77,10 @@
 
    
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+    <?php if (!empty($errors['email'])):?>
+      <div class="alert alert-danger"><?=$errors['email'] ?> </div>
+      <?php endif;?>
    
     <div class="form-floating">
       <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">

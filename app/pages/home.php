@@ -21,7 +21,7 @@
     
     <!-- Custom styles for this template -->
 <link href="<?=ROOT?>/assets/css/headers.css" rel="stylesheet">  
-<link href="assets/css/carousel.css" rel="stylesheet">
+<link href="<?=ROOT?>assets/css/carousel.css" rel="stylesheet">
 
   </head>
   <body >
@@ -52,6 +52,8 @@
             <li><a class="dropdown-item" href="#">Settings</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="login">Sign in</a></li>
+            <li><a class="dropdown-item" href="<?=ROOT?>/logout">log out</a></li>
+
           </ul>
         </div>
       </div>

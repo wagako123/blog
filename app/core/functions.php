@@ -32,6 +32,18 @@ function old_value($key){
     return "";
 }
 
+//auth
+function authenticate($row){
+    $_SESSION['USER']= $row;
+}
+
+//check logged in
+function logged_in(){
+    ($_SESSION['USER']);
+
+    return false;
+}
+
 //create tables
 create_tables();
  function create_tables (){
