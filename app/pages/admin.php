@@ -12,8 +12,9 @@
     
 
     <!-- Bootstrap core CSS -->
-<link href="<?=ROOT?>/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="<?=ROOT?>/assets/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 
     <style>
@@ -39,7 +40,7 @@
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="<?=ROOT?>">Company name</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="<?=ROOT?>">Serene Stays</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -57,13 +58,36 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link " aria-current="page" href="<?=ROOT?>/admin">
               <i class="bi bi-speedometer"></i>
               Dashboard
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="<?=ROOT?>/admin/users">
+              <i class="bi bi-person"></i>
+              Users
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="<?=ROOT?>/admin/categories">
+              <i class="bi bi-tags"></i>
+              Categories
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="<?=ROOT?>/admin/posts">
+              <i class="bi bi-chat-left-heart"></i>
+              posts
+            </a>
+          </li>
           
         </ul>
+
+
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
           <span>Other</span>
@@ -98,7 +122,18 @@
         </div>
       </div>
 
-      content area
+      <?php
+        $section = $url [1] ?? 'dahsboard'; 
+
+        $filename = "../app/pages/admin/".$section.".php";
+
+        if(file_exists($filename))
+        {
+          require_once($filename);
+        }else{
+          require_once "../app/pages/admin/404.php";
+        }
+        ?>
 
     
     </main>
@@ -106,8 +141,7 @@
 </div>
 
 
-    <script src="<?=ROOT?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>      
 
-    <script src="<?=ROOT?>/asets/js/dashboard.js"></script>
   </body>
 </html>
