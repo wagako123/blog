@@ -17,19 +17,36 @@ function query(string $query, array $data =[])
     return false;
 }
 
+function query_row(string $query, array $data =[])
+{
+    
+    $string= "mysql:hostname=".DBHOST.";dbname=". DBNAME;
+    $con = new PDO($string, DBUSER ,DBPASS);
+
+    $stm=$con-> prepare ($query);
+    $stm->execute($data);
+
+    $result=$stm->fetchAll(PDO::FETCH_ASSOC);
+    if(is_array($result) && !empty($result))
+    {
+        return $result[0];
+    }else
+    return false;
+}
+
 //redirect
 
 function redirect($page){
-    header('Location:'.$page);
+    header('Location:'.ROOT.'/'.$page);
     die;
 }
 
 //placeholder values
-function old_value($key){
+function old_value($key, $default =''){
     if(!empty($_POST[$key]))
     return $_POST [$key];
 
-    return "";
+    return $default;
 }
 
 //string to url
@@ -47,6 +64,12 @@ function str_to_url($url)
    return $url;
 }
 
+//username clean
+
+function esc($str)
+{
+    return htmlspecialchars($str ?? '');
+}
 //auth
 function authenticate($row){
     $_SESSION['USER']= $row;
@@ -54,9 +77,11 @@ function authenticate($row){
 
 //check logged in
 function logged_in(){
-    ($_SESSION['USER']);
-
+    if(!empty($_SESSION['USER']));
+        return true;
+        
     return false;
+
 }
 
 //create tables
