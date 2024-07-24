@@ -75,7 +75,7 @@
       <?php if (!empty($errors['password'])):?>
         <div class="alert alert-danger"><?=$errors['password'] ?> </div>
         <?php endif;?>
-      <div class="form-floating">
+        <div class="form-floating">
         <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
         <label for="floatingPassword">Re-type Password</label>
       </div>

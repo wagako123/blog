@@ -74,73 +74,71 @@ if(!file_exists($filename))
 //EDIT SECTION
 if($action == 'edit')
   {
-    $query = "select * from users where id = :id limit 1";
-    $row   = query_row($query, ['id' =>$id]);
+   
+        $query = "select * from users where id = :id limit 1";
+        $row   = query_row($query, ['id' =>$id]);
 
-    if(!empty($_POST))
-    {
+        if(!empty($_POST))
+        {
 
-    
-    if($row){
+        if($row){
 
-    
+          //validate
+          $errors=[];
 
-  //validate
-  $errors=[];
+          //errors
 
-  //errors
+          if(empty($_POST['username'])){
+            $errors['username']="username required";
+          }else 
+          if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
+            $errors['username'] = "username cannot have spaces";
+          }
 
-  if(empty($_POST['username'])){
-    $errors['username']="username required";
-  }else 
-  if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
-    $errors['username'] = "username cannot have spaces";
-  }
+          $query = "select id from users where email = :email && id != :id limit 1";
+          $email = query($query, ['email'=>$_POST['email'], 'id'=>$id ]);
+          
+          if(empty($_POST['email'])){
+            $errors['email']="email required";
+          }else
+          if($email){
+            $errors['email']="email is already in use";
+          }
+          
+          if(empty($_POST['password'])){
+            
+          }else
+          if(strlen($_POST['password'])<8){
+            $errors['password']="password must be 8 characters long";
+          }if($_POST['password'] !== $_POST["retype_password"]){
+            $errors['password']="passwords do not match";
+          } 
 
-  $query = "select id from users where email = :email && id != :id limit 1";
-  $email = query($query, ['email'=>$_POST['email']  ]);
-  
-  if(empty($_POST['email'])){
-    $errors['email']="email required";
-  }else
-  if($email){
-    $errors['email']="email is already in use";
-  }
-  
-  if(empty($_POST['password'])){
-    
-  }else
-  if(strlen($_POST['password'])<8){
-    $errors['password']="password must be 8 characters long";
-  }if($_POST['password'] !== $_POST["retype_password"]){
-    $errors['password']="passwords do not match";
-  } 
+          if (empty($errors)){
+            //save to database
+            $data=[];
+            $data['username']= $_POST['username'];
+            $data['email']   = $_POST['email'];
+            $data['role']    = $row['role'];
+            $data['id']      = $id;
 
-  if (empty($errors)){
-    //save to database
-    $data=[];
-    $data['username']= $_POST['username'];
-    $data['email']   = $_POST['email'];
-    $data['role']    = $row['role'];
-    $data['id']    = $id;
+            if (empty($_POST['password'])){
+              $query=" update users set username =:username, email =:email, role =:role where id= :id limit 1";
 
-    if (empty($_POST['password'])){
-      $query=" update users set username =:username, email =:email, role =:role where id= :id limit 1";
+            }else {
+            $data['password']= password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $query=" update users set username =:username, email =:email, password =:password, role =:role where id= :id limit 1";
 
-    }else {
-    $data['password']= password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $query=" update users set username =:username, email =:email, password =:password, role =:role where id= :id limit 1";
+            }
 
+            query($query,$data);
+
+            redirect('admin/users');
+        }
+        }
     }
-
-    $query=" update users set username =:username, email =:email, password =:password, role =:role where id= :id limit 1";
-    query($query,$data);
-
-    redirect('admin/users');
- }
-}
-}
   }
+
 
 ?>
 
