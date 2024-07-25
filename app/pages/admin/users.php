@@ -8,7 +8,10 @@
     <?php if (!empty($errors)):?>
       <div class="alert alert-danger">Please fix errors below </div>
       <?php endif;?>
-    <div class="form-floating">
+      <a href="<?=ROOT?>/admin/users">
+        <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
+        </a>
+    <div class="form-floating mt-4">
 
       <input value="<?=old_value("email")?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
@@ -53,7 +56,10 @@
       <?php if (!empty($errors)):?>
         <div class="alert alert-danger">Please fix errors below </div>
         <?php endif;?>
-      <div class="form-floating">
+        <a href="<?=ROOT?>/admin/users">
+        <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
+        </a>
+      <div class="form-floating mt-4">
 
         <input value="<?=old_value("email", $row['email'])?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">Email address</label>
@@ -70,26 +76,59 @@
         <?php endif;?>
       <div class="form-floating">
         <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Password</label>
+        <label for="floatingPassword">Password(leave empty to keep previous password)</label>
       </div>
       <?php if (!empty($errors['password'])):?>
         <div class="alert alert-danger"><?=$errors['password'] ?> </div>
         <?php endif;?>
         <div class="form-floating">
         <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Re-type Password</label>
+        <label for="floatingPassword">Re-type Password(leave empty to keep previous password)</label>
       </div>
 
       
     
       <button class="mt-4 w-100 btn btn-lg btn-primary" type="submit">edit account</button>
       <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
+      <?php else :?>
+          <div class="alert alert-danger text-center" >Record Not found</div>
       <?php endif ;?>
   </form>
   </div>
 
 <?php elseif($action == 'delete'):?>
+  <div class="col-md-6 mx-auto">
+    <div class="form-floating">
+    <form method="post">
+  
+    <?php if (!empty($row)):?>
+      <?php if (!empty($errors)):?>
+        <div class="alert alert-danger">Please fix errors below </div>
+        <?php endif;?>
+        <a href="<?=ROOT?>/admin/users">
+        <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
+        </a>
+      <div >
 
+        <div ><?=old_value("email", $row['email'])?></div>
+        
+      </div>
+      <?php if (!empty($errors['email'])):?>
+        <div class="alert alert-danger"><?=$errors['email'] ?> </div>
+        <?php endif;?>
+      <div >
+        <div > <?=old_value('username', $row['username'])?></div>
+        
+      </div>
+      
+    
+      <button class="mt-4 w-100 btn btn-lg btn-danger" type="submit">delete account</button>
+      <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
+      <?php else :?>
+          <div class="alert alert-danger text-center" >Record Not found</div>
+      <?php endif ;?>
+  </form>
+  </div>
 <?php else:?>   
 
 <h4>Users 
@@ -128,7 +167,9 @@
         <td><?=esc($row['username'])?></td>
         <td><?=$row['email']?></td>
         <td><?=$row['role']?></td>
-        <td>Image</td>
+        <td>
+          <img src=" <?=get_image($row['image']) ?>" style="width: 100px; height: 100px; object-fit:cover;">
+        </td>
         <td><?=date ("jS M, Y",strtotime($row['date']))?></td>
         <td class="padding-between">
           <a href="<?=ROOT?>/admin/users/edit/<?=$row['id']?>">
