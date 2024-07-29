@@ -56,35 +56,53 @@
       <?php if (!empty($errors)):?>
         <div class="alert alert-danger">Please fix errors below </div>
         <?php endif;?>
+        
+        
+        
         <a href="<?=ROOT?>/admin/users">
-        <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
+         <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
         </a>
-      <div class="form-floating mt-4">
 
-        <input value="<?=old_value("email", $row['email'])?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
-      </div>
-      <?php if (!empty($errors['email'])):?>
-        <div class="alert alert-danger"><?=$errors['email'] ?> </div>
-        <?php endif;?>
-      <div class="form-floating">
-        <input value="<?=old_value('username', $row['username'])?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
-        <label for="floatingInput">Username</label>
-      </div>
-      <?php if (!empty($errors['username'])):?>
-        <div class="alert alert-danger"><?=$errors['username'] ?> </div>
-        <?php endif;?>
-      <div class="form-floating">
-        <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Password(leave empty to keep previous password)</label>
-      </div>
-      <?php if (!empty($errors['password'])):?>
-        <div class="alert alert-danger"><?=$errors['password'] ?> </div>
-        <?php endif;?>
+        <div class="my-2 mt-2">
+          <label class="d-block">
+            <img class="mx-auto " src=" <?=get_image($row['image']) ?>" style="width: 100px; height: 100px; object-fit:cover;">
+            <input onchange="display_image_edit(this.files[0])" type="file" name="image" >
+          </label>
+        </div>
+
+        <script>
+          function display_image_edit(file){
+            document.querySelector(".image-preview-edit").src =URL.createObjectURL(file);
+          }
+          </script>
+
+        
+        <div class="form-floating mt-2">
+
+          <input value="<?=old_value("email", $row['email'])?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">Email address</label>
+        </div>
+        <?php if (!empty($errors['email'])):?>
+          <div class="alert alert-danger"><?=$errors['email'] ?> </div>
+          <?php endif;?>
         <div class="form-floating">
-        <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Re-type Password(leave empty to keep previous password)</label>
-      </div>
+          <input value="<?=old_value('username', $row['username'])?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
+          <label for="floatingInput">Username</label>
+        </div>
+        <?php if (!empty($errors['username'])):?>
+          <div class="alert alert-danger"><?=$errors['username'] ?> </div>
+          <?php endif;?>
+        <div class="form-floating">
+          <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password(leave empty to keep previous password)</label>
+        </div>
+        <?php if (!empty($errors['password'])):?>
+          <div class="alert alert-danger"><?=$errors['password'] ?> </div>
+          <?php endif;?>
+          <div class="form-floating">
+          <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Re-type Password(leave empty to keep previous password)</label>
+        </div>
 
       
     
@@ -155,7 +173,10 @@
 
     <?php
 
-        $query="select * from users order by id desc";
+      $limit  = 10;
+      $offset = ($PAGE['page_number']-1)* $limit;
+
+        $query="select * from users order by id desc limit $limit offset $offset";
         $rows= query($query);
         ?>
             <!-- check for users active because of log out bug -->
@@ -186,6 +207,19 @@
             <?php endforeach; ?>
         <?php endif; ?>
 </table>
+</div>
+<div class="col-md-12 mb-4">
+  <a href="<?=$PAGE['first_link']?>">
+     <button class="btn btn-primary">First page</button>
+  </a>
+  <a href="<?=$PAGE['prev_link']?>">
+    <button class="btn btn-primary">prev page</button>
+  </a>
+  <a href="<?=$PAGE['next_link']?>">
+
+          <button class="btn btn-primary float-end">next page</button>
+  </a>
+
 </div>
 
 <?php endif;?>

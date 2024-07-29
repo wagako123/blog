@@ -36,6 +36,43 @@ function query_row(string $query, array $data =[])
 
 //redirect
 
+function get_pagination_vars(){
+    //pagination
+$page_number = $_GET['page' ]?? 1;
+$page_number = empty($page_number) ? 1 : (int)$page_number;
+$page_number = $page_number < 1 ? 1 : $page_number;
+
+$current_link = $_GET['url'] ?? 'home'; 
+$current_link = ROOT ."/".$current_link;
+$query_string="";
+
+foreach($_GET as $key => $value){
+    if ($key != "url")
+    $current_link .= "&".$key."=".$value;
+}
+if(!strstr($query_string,"page=")){
+    $query_string .="&page=" .$page_number;
+}
+$query_string = trim($query_string,"&");
+$current_link .="?".$query_string;
+
+$current_link = preg_replace("/page=.*/", "page=".$page_number, $current_link);
+$next_link    = preg_replace("/page=.*/", "page=".($page_number+1), $current_link);
+$first_link   = preg_replace("/page=.*/", "page=1", $current_link);
+$prev_page_number = $page_number < 2 ? 1 : $page_number - 1;
+$prev_link    = preg_replace("/page=.*/", "page=".$prev_page_number, $current_link);
+
+$result=[
+    'current_link' =>  $current_link,
+    'next_link'    =>  $next_link,
+    'first_link'   =>  $first_link ,
+    'prev_link'    =>  $first_link ,
+    'page_number'  => $page_number,
+];
+
+return $result;
+}
+
 function redirect($page){
     header('Location:'.ROOT.'/'.$page);
     die;
