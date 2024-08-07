@@ -86,6 +86,17 @@ function old_value($key, $default =''){
     return $default;
 }
 
+//placeholder select
+function old_selected($key, $value, $default = ''){
+    if(!empty($_POST[$key]) && $_POST[$key] == $value)
+        return "selected";
+
+    if ($default == $value)
+    return "selected";
+
+    return "";
+}
+
 //imagefunction
 
 function get_image($file)
@@ -194,3 +205,60 @@ $stm=$con-> prepare ($query);
 $stm->execute();
 
  }
+
+function resize_img($filename, $max_size = 1000){
+
+    if (file_exists($filename)){
+        $type= mime_content_type($filename);
+        switch ($type) {
+            case 'image/jpg':
+                $image = imagecreatefromjpeg($filename);
+            break;
+
+            case 'image/png':
+                $image = imagecreatefromjpeg($filename);
+            break;
+
+            case 'image/gif':
+                $image = imagecreatefromjpeg($filename);
+            break;
+
+            case 'image/webp':
+                $image = imagecreatefromjpeg($filename);
+            break;
+            
+            default:
+                return;
+                break;
+        }
+        $src_width  = imagesx($image);
+        $src_height = imagesy($image);
+
+        if ($src_width > $src_height)
+        {
+            if($src_width< $max_size){
+                $max_size= $src_width;
+            }
+            $dstn_width  = $max_size;
+            $dstn_height = ($src_height/$src_width)*$max_size;
+
+        }else {
+            if($src_height< $max_size){
+                $max_size= $src_height;
+            }
+            $dstn_height  = $max_size;
+            $dstn_height = ($src_width/$src_height)*$max_size;
+
+
+        }
+        $dstn_height =round($dstn_height);
+        $dstn_width  =round($dstn_width);
+
+        $dst_image = imagecreatetruecolor($dstn_height,$dstn_width);
+
+        imagecopyresampled($dst_image,$image, 0, 0, 0, 0, $dstn_width, $dstn_height, $src_width, $src_height);
+
+        imagejpeg($dst_image, $filename, 90);
+    }
+
+}

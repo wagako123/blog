@@ -5,83 +5,50 @@
   if($action == 'add')
   {
     if(!empty($_POST))
-    {
+        {
+          //validate
+          $errors = [];
 
-  //validate
-  $errors=[];
-
-  //errors
-
-  if(empty($_POST['username'])){
-    $errors['username']="username required";
-  }else 
-  if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
-    $errors['username'] = "username cannot have spaces";
-  }
-
-  $query = "select id from users where email = :email limit 1";
-  $email = query($query, ['email'=>$_POST['email']]);
-  
-  if(empty($_POST['email'])){
-    $errors['email']="email required";
-  }else
-  if($email){
-    $errors['email']="email is already in use";
-  }
-  
-  if(empty($_POST['password'])){
-    $errors['password']="password required";
-  }else
-  if(strlen($_POST['password'])<8){
-    $errors['password']="password must be 8 characters long";
-  }if($_POST['password'] !== $_POST["retype_password"]){
-    $errors['password']="passwords do not match";
-  } 
-
-  //validate image
-  $allowed= ['image/jpeg','image/png', 'image/webp'];
-  if (!empty($_FILES['image']['name'])){
-    $destination ="";
-
-    if(!in_array($_FILES['image']['type'], $allowed)){
-      $errors['image'] = "Image format not supported";
-    }else{
-      $folder = "uploads/";
-      if(!file_exists($folder))
-      {
-        mkdir($folder, 0777, true);
-      }
-      $destination = $folder.time().$_FILES['image']['name'];
-      move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-      resize_img($destination);
-    }
-  }
-
-  if (empty($errors)){
-    //save to database
-    $data=[];
-    $data['username']= $_POST['username'];
-    $data['email']   = $_POST['email'];
-    $data['role']    = $_POST['role'];
-    $data['password']= password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-
-  if(!empty($destination))
+          if(empty($_POST['category']))
           {
-            $data['image']     = $destination;
-            $query = "insert into users (username,email,password,role,image) values (:username,:email,:password,:role,:image)";
+            $errors['category'] = "A category is required";
+          }else
+          if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
+          {
+            $errors['category'] = "Category can only have letters";
           }
 
+          $slug = str_to_url($_POST['category']);
 
-    redirect('admin/users');
- }
-}
-  }
+          $query = "select id from categories where slug = :slug limit 1";
+          $slug_row = query($query, ['slug'=>$slug]);
+ 
+          if($slug_row)
+          {
+            $slug .= rand(1000,9999);
+          }
+   
+          if(empty($errors))
+          {
+            //save to database
+            $data = [];
+            $data['category'] = $_POST['category'];
+            $data['slug']     = $slug;
+            $data['disabled'] = $_POST['disabled'];
+
+            $query = "insert into categories (category,slug,disabled) values (:category,:slug,:disabled)";
+            query($query, $data);
+
+            redirect('admin/categories');
+
+          }
+        }
+
 //EDIT SECTION
 if($action == 'edit')
   {
    
-        $query = "select * from users where id = :id limit 1";
+        $query = "select * from categories where id = :id limit 1";
         $row   = query_row($query, ['id' =>$id]);
 
         if(!empty($_POST))
@@ -101,7 +68,7 @@ if($action == 'edit')
             $errors['username'] = "username cannot have spaces";
           }
 
-          $query = "select id from users where email = :email && id != :id limit 1";
+          $query = "select id from categories where email = :email && id != :id limit 1";
           $email = query($query, ['email'=>$_POST['email'], 'id'=>$id ]);
           
           if(empty($_POST['email'])){
@@ -164,10 +131,10 @@ if($action == 'edit')
                 $data['image']       = $destination;
               }
             
-              $query = "update users set username = :username, email = :email, $password_str $image_str role = :role where id = :id limit 1";
+              $query = "update categories set username = :username, email = :email, $password_str $image_str role = :role where id = :id limit 1";
 
             query($query, $data);
-            redirect('admin/users');
+            redirect('admin/categories');
           }
         }
     }
@@ -177,7 +144,7 @@ if($action == 'edit')
   if($action == 'delete')
   {
    
-        $query = "select * from users where id = :id limit 1";
+        $query = "select * from categories where id = :id limit 1";
         $row   = query_row($query, ['id' =>$id]);
 
         if($_SERVER['REQUEST_METHOD'] == "POST")
@@ -197,13 +164,14 @@ if($action == 'edit')
             $data['id']      = $id;
 
            
-            $query=" delete from users where id = :id limit 1";
+            $query=" delete from categories where id = :id limit 1";
 
             
             query($query,$data);
 
-            redirect('admin/users');
+            redirect('admin/categories');
         }
         }
     }
+  }
   }

@@ -2,12 +2,30 @@
 
 <div class="col-md-6 mx-auto">
     <div class="form-floating">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
   
 
     <?php if (!empty($errors)):?>
       <div class="alert alert-danger">Please fix errors below </div>
       <?php endif;?>
+
+      <div class="my-2">
+	    	<label class="d-block">
+	    		<img class="mx-auto d-block image-preview-edit" src="<?=get_image('')?>" style="cursor: pointer;width: 150px;height: 150px;object-fit: cover;">
+	    		<input onchange="display_image_edit(this.files[0])" type="file" name="image" class="d-none">
+	    	</label>
+	    	<?php if(!empty($errors['image'])):?>
+		      <div class="text-danger"><?=$errors['image']?></div>
+		    <?php endif;?>
+
+	    	<script>
+	    		
+	    		function display_image_edit(file)
+	    		{
+	    			document.querySelector(".image-preview-edit").src = URL.createObjectURL(file);
+	    		}
+	    	</script>
+	    </div>
       <a href="<?=ROOT?>/admin/users">
         <button class="mt-4 w-100 btn btn-lg btn-primary" type="button">back</button>
         </a>
@@ -18,6 +36,17 @@
     </div>
     <?php if (!empty($errors['email'])):?>
       <div class="alert alert-danger"><?=$errors['email'] ?> </div>
+      <?php endif;?>
+    <div class="form-floating">
+      <div class="form-floating mt-4 mb-2">
+      <select name=role class="form-select">
+        <option value="user">User</option>
+        <option value="admin">admin</option>
+
+      </select>
+    </div>
+    <?php if (!empty($errors['role'])):?>
+      <div class="alert alert-danger"><?=$errors['role'] ?> </div>
       <?php endif;?>
     <div class="form-floating">
       <input value="<?=old_value("username")?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
@@ -65,16 +94,18 @@
 
         <div class="my-2 mt-2">
           <label class="d-block">
-            <img class="mx-auto " src=" <?=get_image($row['image']) ?>" style="width: 100px; height: 100px; object-fit:cover;">
-            <input onchange="display_image_edit(this.files[0])" type="file" name="image" >
+            <img class="mx-auto d-block image_preview_edit" src=" <?=get_image($row['image']) ?>" style="cursor: pointer; width: 100px; height: 100px; object-fit:cover;">
+            <input onchange="display_image_edit(this.files[0])" type="file" name="image" class="d-none" >
           </label>
-        </div>
+        
 
         <script>
           function display_image_edit(file){
             document.querySelector(".image-preview-edit").src =URL.createObjectURL(file);
           }
           </script>
+
+        </div>
 
         
         <div class="form-floating mt-2">
@@ -88,6 +119,19 @@
         <div class="form-floating">
           <input value="<?=old_value('username', $row['username'])?>" name="username" type="text" class="form-control" id="floatingInput" placeholder="username">
           <label for="floatingInput">Username</label>
+        </div>
+       
+        <div class="form-floating">
+           <div class="form-floating mt-4 mb-2">
+            <select name=role class="form-select">
+              <option <?=old_selected('role', 'user', $row['role'])?> value="user ">User</option>
+              <option <?=old_selected('role', 'admin',$row['role'])?> value="admin">admin</option>
+
+            </select>
+        </div>
+    <?php if (!empty($errors['role'])):?>
+      <div class="alert alert-danger"><?=$errors['role'] ?> </div>
+      <?php endif;?>          
         </div>
         <?php if (!empty($errors['username'])):?>
           <div class="alert alert-danger"><?=$errors['username'] ?> </div>
@@ -134,6 +178,7 @@
       <?php if (!empty($errors['email'])):?>
         <div class="alert alert-danger"><?=$errors['email'] ?> </div>
         <?php endif;?>
+      
       <div >
         <div > <?=old_value('username', $row['username'])?></div>
         
