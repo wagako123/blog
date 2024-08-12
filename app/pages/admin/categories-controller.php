@@ -1,177 +1,116 @@
-<?php
+<?php 
 
-//add new form control
-
-  if($action == 'add')
-  {
+//add new
+if($action == 'add')
+{
     if(!empty($_POST))
-        {
-          //validate
-          $errors = [];
+    {
+      //validate
+      $errors = [];
 
-          if(empty($_POST['category']))
-          {
-            $errors['category'] = "A category is required";
-          }else
-          if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
-          {
-            $errors['category'] = "Category can only have letters";
-          }
+      if(empty($_POST['category']))
+      {
+        $errors['category'] = "A category is required";
+      }else
+      if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
+      {
+        $errors['category'] = "Category can only have letters";
+      }
 
-          $slug = str_to_url($_POST['category']);
+      $slug = str_to_url($_POST['category']);
 
-          $query = "select id from categories where slug = :slug limit 1";
-          $slug_row = query($query, ['slug'=>$slug]);
- 
-          if($slug_row)
-          {
-            $slug .= rand(1000,9999);
-          }
-   
-          if(empty($errors))
-          {
-            //save to database
-            $data = [];
-            $data['category'] = $_POST['category'];
-            $data['slug']     = $slug;
-            $data['disabled'] = $_POST['disabled'];
+      $query = "select id from categories where slug = :slug limit 1";
+      $slug_row = query($query, ['slug'=>$slug]);
 
-            $query = "insert into categories (category,slug,disabled) values (:category,:slug,:disabled)";
-            query($query, $data);
+      if($slug_row)
+      {
+        $slug .= rand(1000,9999);
+      }
 
-            redirect('admin/categories');
+      if(empty($errors))
+      {
+        //save to database
+        $data = [];
+        $data['category'] = $_POST['category'];
+        $data['slug']     = $slug;
+        $data['disabled'] = $_POST['disabled'];
 
-          }
-        }
+        $query = "insert into categories (category,slug,disabled) values (:category,:slug,:disabled)";
+        query($query, $data);
 
-//EDIT SECTION
+        redirect('admin/categories');
+
+      }
+    }
+}else
 if($action == 'edit')
-  {
-   
-        $query = "select * from categories where id = :id limit 1";
-        $row   = query_row($query, ['id' =>$id]);
+{
+    
+    $query = "select * from categories where id = :id limit 1";
+    $row = query_row($query, ['id'=>$id]);
 
-        if(!empty($_POST))
+    if(!empty($_POST))
+    {
+
+      if($row)
+      {
+
+        //validate
+        $errors = [];
+
+        if(empty($_POST['category']))
         {
-
-        if($row){
-
-          //validate
-          $errors=[];
-
-          //errors
-
-          if(empty($_POST['username'])){
-            $errors['username']="username required";
-          }else 
-          if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
-            $errors['username'] = "username cannot have spaces";
-          }
-
-          $query = "select id from categories where email = :email && id != :id limit 1";
-          $email = query($query, ['email'=>$_POST['email'], 'id'=>$id ]);
-          
-          if(empty($_POST['email'])){
-            $errors['email']="email required";
-          }else
-          if($email){
-            $errors['email']="email is already in use";
-          }
-          
-          if(empty($_POST['password'])){
-            
-          }else
-          if(strlen($_POST['password'])<8){
-            $errors['password']="password must be 8 characters long";
-          }if($_POST['password'] !== $_POST["retype_password"]){
-            $errors['password']="passwords do not match";
-          } 
-
-          $allowed = ['image/jpeg','image/png','image/webp'];
-          if(!empty($_FILES['image']['name']))
-          {
-            $destination = "";
-            if(!in_array($_FILES['image']['type'], $allowed))
-            {
-              $errors['image'] = "Image format not supported";
-            }else
-            {
-              $folder = "uploads/";
-              if(!file_exists($folder))
-              {
-                mkdir($folder, 0777, true);
-              }
-
-              $destination = $folder . time() . $_FILES['image']['name'];
-              move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-              resize_img($destination);
-            }
-          }
-
-          if (empty($errors)){
-            //save to database
-            $data=[];
-            $data['username']= $_POST['username'];
-            $data['email']   = $_POST['email'];
-            $data['role']    = $_POST['role'];
-            $data['id']      = $id;
-
-            $password_str     = "";
-            $image_str        = "";
-
-              if(!empty($_POST['password']))
-              {
-                $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $password_str = "password = :password, ";
-              }
-
-              if(!empty($destination))
-              {
-                $image_str = "image = :image, ";
-                $data['image']       = $destination;
-              }
-            
-              $query = "update categories set username = :username, email = :email, $password_str $image_str role = :role where id = :id limit 1";
-
-            query($query, $data);
-            redirect('admin/categories');
-          }
-        }
-    }
-  }else
-
-  //delete section 
-  if($action == 'delete')
-  {
-   
-        $query = "select * from categories where id = :id limit 1";
-        $row   = query_row($query, ['id' =>$id]);
-
-        if($_SERVER['REQUEST_METHOD'] == "POST")
+          $errors['category'] = "A category is required";
+        }else
+        if(!preg_match("/^[a-zA-Z0-9 \-\_\&]+$/", $_POST['category']))
         {
-
-        if($row){
-
-          //validate
-          $errors=[];
-
-          //errors
-
-
-          if (empty($errors)){
-            //delete from database
-            $data=[];
-            $data['id']      = $id;
-
-           
-            $query=" delete from categories where id = :id limit 1";
-
-            
-            query($query,$data);
-
-            redirect('admin/categories');
+          $errors['category'] = "Category can only have letters";
         }
+ 
+        if(empty($errors))
+        {
+          //save to database
+          $data = [];
+          $data['category'] = $_POST['category'];
+          $data['disabled'] = $_POST['disabled'];
+          $data['id'] = $id;
+
+          $query = "update categories set category = :category, disabled = :disabled where id = :id limit 1";
+
+          query($query, $data);
+          redirect('admin/categories');
+
         }
+      }
     }
-  }
+}else
+if($action == 'delete')
+{
+    
+    $query = "select * from categories where id = :id limit 1";
+    $row = query_row($query, ['id'=>$id]);
+
+    if($_SERVER['REQUEST_METHOD'] == "POST")
+    {
+
+      if($row)
+      {
+
+        //validate
+        $errors = [];
+
+        if(empty($errors))
+        {
+          //delete from database
+          $data = [];
+          $data['id']       = $id;
+
+          $query = "delete from categories where id = :id limit 1";
+          query($query, $data);
+
+          redirect('admin/categories');
+
+        }
+      }
+    }
   }

@@ -68,14 +68,7 @@
         
 
         
-        <div class="form-floating mt-2">
-
-          <input value="<?=old_value("email", $row['email'])?>" name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">Email address</label>
-        </div>
-        <?php if (!empty($errors['email'])):?>
-          <div class="alert alert-danger"><?=$errors['email'] ?> </div>
-          <?php endif;?>
+        
         <div class="form-floating">
           <input value="<?=old_value('category', $row['category'])?>" name="category" type="text" class="form-control" id="floatingInput" placeholder="category">
           <label for="floatingInput">category</label>
@@ -83,33 +76,13 @@
        
         <div class="form-floating">
            <div class="form-floating mt-4 mb-2">
-            <select name=role class="form-select">
-              <option <?=old_selected('role', 'user', $row['role'])?> value="user ">User</option>
-              <option <?=old_selected('role', 'admin',$row['role'])?> value="admin">admin</option>
-
+            <select name=disabled class="form-select">
+              <option <?=old_selected('disabled', 'user', $row['disabled'])?> value="0 ">Yes</option>
+              <option <?=old_selected('disabled', 'admin',$row['disabled'])?> value="1">no</option>
+              <label for="floatingInput">Active</label>
             </select>
         </div>
-    <?php if (!empty($errors['role'])):?>
-      <div class="alert alert-danger"><?=$errors['role'] ?> </div>
-      <?php endif;?>          
-        </div>
-        <?php if (!empty($errors['category'])):?>
-          <div class="alert alert-danger"><?=$errors['category'] ?> </div>
-          <?php endif;?>
-        <div class="form-floating">
-          <input value="<?=old_value("password")?>" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Password(leave empty to keep previous password)</label>
-        </div>
-        <?php if (!empty($errors['password'])):?>
-          <div class="alert alert-danger"><?=$errors['password'] ?> </div>
-          <?php endif;?>
-          <div class="form-floating">
-          <input value="<?=old_value("password")?>" name="retype_password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Re-type Password(leave empty to keep previous password)</label>
-        </div>
-
-      
-    
+  
       <button class="mt-4 w-100 btn btn-lg btn-primary" type="submit">edit account</button>
       <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
       <?php else :?>
@@ -125,6 +98,7 @@
 
     <h1>Delete category</h1>
   
+    
   
     <?php if (!empty($row)):?>
       <?php if (!empty($errors)):?>
@@ -143,8 +117,9 @@
         <?php endif;?>
       
       <div >
+        <?php if(!empty($errors['username'])):?>
         <div > <?=old_value('username', $row['username'])?></div>
-        
+        <?php endif;?>
       </div>
       
     
@@ -152,6 +127,7 @@
       <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
       <?php else :?>
           <div class="alert alert-danger text-center" >Record Not found</div>
+          
       <?php endif ;?>
   </form>
   </div>
@@ -196,7 +172,7 @@
         <td><?=$row['slug']?></td>
         <td><?=$row['disabled'] ?></td>
         
-        
+
         <td class="padding-between">
           <a href="<?=ROOT?>/admin/categories/edit/<?=$row['id']?>">
             <button class="btn btn-warning btn-sm text-white "><i class="bi bi-pencil-square"></i></button>
@@ -225,6 +201,7 @@
           <button class="btn btn-primary float-end">next page</button>
   </a>
 
+  
 </div>
 
 <?php endif;?>
