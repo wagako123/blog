@@ -4,7 +4,7 @@ if($_SERVER['SERVER_NAME']== "localhost")
 {
 define('DBUSER', "root");
 define('DBPASS', "Gabro");
-define('DBNAME', "myblog_db");
+define('DBNAME', "myblog_db2");
 define('DBHOST', "localhost");
 }else{
 define('DBUSER', "root");

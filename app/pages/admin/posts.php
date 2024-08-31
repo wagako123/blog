@@ -32,11 +32,11 @@
         </a>
     <div class="form-floating mt-4">
 
-      <input value="<?=old_value("Title")?>" name="Title" type="Title" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input value="<?=old_value("title")?>" name="title" type="title" class="form-control" id="floatingInput" placeholder="name@example.com">
       <label for="floatingInput">Title</label>
     </div>
-    <?php if (!empty($errors['Title'])):?>
-      <div class="alert alert-danger"><?=$errors['Title'] ?> </div>
+    <?php if (!empty($errors['title'])):?>
+      <div class="alert alert-danger"><?=$errors['title'] ?> </div>
       <?php endif;?>
     <div class="form-floating">
       <div class="form-floating mt-4 mb-2">
@@ -228,7 +228,7 @@
         <?php foreach($rows as $row): ?>
     <tr>
         <td><?=$row['id']?></td>
-        <td><?=esc($row['tile'])?></td>
+        <td><?=esc($row['title'])?></td>
         <td><?=$row['slug']?></td>
         <td>
           <img src=" <?=get_image($row['image']) ?>" style="width: 100px; height: 100px; object-fit:cover;">

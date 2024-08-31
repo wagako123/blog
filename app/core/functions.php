@@ -197,14 +197,14 @@ create_tables();
      $stm->execute();
             // posts table
      $query= "create table if not exists posts(
-            id int,
+            id int primary key auto_increment,
             user_id int,
             category_id int,
             title varchar (100) not null,
             content text null,
             image varchar (1024) null,
             date datetime default current_timestamp,
-            slug varchar(10) not null,
+            slug varchar(100) not null,
             
             key user_id (user_id),
             key category_id (category_id),

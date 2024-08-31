@@ -1,4 +1,4 @@
-<?php
+t<?php
 
 //add new form control
 
@@ -15,8 +15,8 @@
   if(empty($_POST['title'])){
     $errors['title']="title required";
   }
-  if(empty($_POST['category'])){
-    $errors['category']="category required";
+  if(empty($_POST['category_id'])){
+    $errors['category_id']="category required";
   }
   
 
@@ -66,6 +66,8 @@
             $data['image']     = $destination;
             $query = "insert into posts (title,slug,category_id,content,image, user_id) values (:title,:slug,:category_id,:content,:image, :user_id)";
           }
+
+    query($query, $data);
 
 
     redirect('admin/posts');
