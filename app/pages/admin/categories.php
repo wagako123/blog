@@ -83,7 +83,7 @@
             </select>
         </div>
   
-      <button class="mt-4 w-100 btn btn-lg btn-primary" type="submit">edit account</button>
+      <button class="mt-4 w-100 btn btn-lg btn-primary" type="submit">edit category</button>
       <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
       <?php else :?>
           <div class="alert alert-danger text-center" >Record Not found</div>
@@ -123,7 +123,7 @@
       </div>
       
     
-      <button class="mt-4 w-100 btn btn-lg btn-danger" type="submit">delete account</button>
+      <button class="mt-4 w-100 btn btn-lg btn-danger" type="submit">delete category</button>
       <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y")?> </p>
       <?php else :?>
           <div class="alert alert-danger text-center" >Record Not found</div>

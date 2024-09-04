@@ -18,6 +18,9 @@ t<?php
   if(empty($_POST['category_id'])){
     $errors['category_id']="category required";
   }
+  if(empty($_POST['content'])){
+    $errors['content']="content required";
+  }
   
 
   //validate image
@@ -58,16 +61,16 @@ t<?php
     $data['category_id']= $_POST['category_id'];
     $data['user_id']    =user ('id');
 
-    $query = "insert into posts (title,slug,category_id,content,image, user_id ) values (:title,:slug,:category_id,:content,:image, :user_id)";
+    $query = "insert into posts (title,slug,category_id,content,user_id ) values (:title,:slug,:category_id,:content,:user_id)";
 
 
   if(!empty($destination))
           {
             $data['image']     = $destination;
-            $query = "insert into posts (title,slug,category_id,content,image, user_id) values (:title,:slug,:category_id,:content,:image, :user_id)";
+            $query = "insert into posts (title,slug,category_id,content,image,user_id) values (:title,:slug,:category_id,:content,:image,:user_id)";
           }
 
-    query($query, $data);
+    query($query,$data);
 
 
     redirect('admin/posts');
@@ -91,69 +94,49 @@ if($action == 'edit')
 
           //errors
 
-          if(empty($_POST['username'])){
-            $errors['username']="username required";
-          }else 
-          if(!preg_match("/^[a-zA-Z1-9]+$/", $_POST['username'])){
-            $errors['username'] = "username cannot have spaces";
+          if(empty($_POST['title'])){
+            $errors['title']="title required";
           }
-
-          $query = "select id from posts where email = :email && id != :id limit 1";
-          $email = query($query, ['email'=>$_POST['email'], 'id'=>$id ]);
-          
-          if(empty($_POST['email'])){
-            $errors['email']="email required";
-          }else
-          if($email){
-            $errors['email']="email is already in use";
+          if(empty($_POST['category_id'])){
+            $errors['category_id']="category required";
+          }
+          if(empty($_POST['content'])){
+            $errors['content']="content required";
           }
           
-          if(empty($_POST['password'])){
-            
-          }else
-          if(strlen($_POST['password'])<8){
-            $errors['password']="password must be 8 characters long";
-          }if($_POST['password'] !== $_POST["retype_password"]){
-            $errors['password']="passwords do not match";
-          } 
-
-          $allowed = ['image/jpeg','image/png','image/webp'];
-          if(!empty($_FILES['image']['name']))
-          {
-            $destination = "";
-            if(!in_array($_FILES['image']['type'], $allowed))
-            {
+        
+          //validate image
+          $allowed= ['image/jpeg','image/png', 'image/webp'];
+          if (!empty($_FILES['image']['name'])){
+            $destination ="";
+        
+            if(!in_array($_FILES['image']['type'], $allowed)){
               $errors['image'] = "Image format not supported";
-            }else
-            {
+            }else{
               $folder = "uploads/";
               if(!file_exists($folder))
               {
                 mkdir($folder, 0777, true);
               }
-
-              $destination = $folder . time() . $_FILES['image']['name'];
+              $destination = $folder.time().$_FILES['image']['name'];
               move_uploaded_file($_FILES['image']['tmp_name'], $destination);
               resize_img($destination);
             }
           }
-
+        
+        
           if (empty($errors)){
             //save to database
             $data=[];
-            $data['username']= $_POST['username'];
-            $data['email']   = $_POST['email'];
-            $data['role']    = $_POST['role'];
+            $data['title']     = $_POST['title'];
+            $data['content']   = $_POST['content'];
+            $data['category_id']    = $_POST['category_id'];
             $data['id']      = $id;
 
             $password_str     = "";
             $image_str        = "";
 
-              if(!empty($_POST['password']))
-              {
-                $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $password_str = "password = :password, ";
-              }
+              
 
               if(!empty($destination))
               {
@@ -161,7 +144,7 @@ if($action == 'edit')
                 $data['image']       = $destination;
               }
             
-              $query = "update posts set username = :username, email = :email, $password_str $image_str role = :role where id = :id limit 1";
+              $query = "update posts set title = :title, content = :content, $image_str category_id = :category_id where id = :id limit 1";
 
             query($query, $data);
             redirect('admin/posts');
@@ -198,6 +181,9 @@ if($action == 'edit')
 
             
             query($query,$data);
+            
+            if(file_exists($row['image']))
+            unlink($row['image']);
 
             redirect('admin/posts');
         }
