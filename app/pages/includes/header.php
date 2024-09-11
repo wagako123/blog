@@ -39,14 +39,17 @@
 
         ?>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+          <li><a href="home" class="nav-link px-2 link-secondary">Home</a></li>
           <li><a href="#" class="nav-link px-2 link-dark">My stays</a></li>
           <li><a href="#" class="nav-link px-2 link-dark">Blogs</a></li>
           <li><a href="#" class="nav-link px-2 link-dark"></a></li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <form action="<?=ROOT?>/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+          <div class="input-group">
+            <input value="<?=$_GET['find'] ?? ''?>" name="find" type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <button>Search</button>
+          </div>
         </form>
 
         <div class="dropdown text-end">
@@ -68,4 +71,8 @@
 
  
       <!-- my carousel-->
-      <?php include '../app/pages/includes/carousel.php'; ?>
+
+      <?php 
+      if ($url[0]== 'home')
+      include '../app/pages/includes/carousel.php';
+       ?>
