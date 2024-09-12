@@ -39,32 +39,45 @@
 
         ?>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="home" class="nav-link px-2 link-secondary">Home</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark">My stays</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark">Blogs</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark"></a></li>
+          <li><a href="<?=ROOT?>/home" class="nav-link px-2 link-secondary">Home</a></li>
+          <li><a href="<?=ROOT?>/home" class="nav-link px-2 link-dark">My stays</a></li>
+          <li><a href="<?=ROOT?>/blog" class="nav-link px-2 link-dark">Blogs</a></li>
+          <li><a href="<?=ROOT?>/contact" class="nav-link px-2 link-dark">Contact</a></li>
         </ul>
 
         <form action="<?=ROOT?>/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
           <div class="input-group">
             <input value="<?=$_GET['find'] ?? ''?>" name="find" type="search" class="form-control" placeholder="Search..." aria-label="Search">
-            <button>Search</button>
+            <button><i class="bi bi-search">search</i></button>
+            <!-- get rid of ugly search button -->
           </div>
         </form>
-
+        <?php if(logged_in()):?>
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+            <img src="<?= get_image(user('image')) ?> " alt="mdo" style="object-fit:cover;" width="32" height="32" class="rounded-circle">
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+          <li><a class="dropdown-item" href="#">Hi <?= user('username') ?></a></li>
             <li><a class="dropdown-item" href="admin">Admin</a></li>
             <li><a class="dropdown-item" href="#">Settings</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="login">Sign in</a></li>
+           
             <li><a class="dropdown-item" href="<?=ROOT?>/logout">log out</a></li>
 
           </ul>
         </div>
+        <?php else:?>
+          <div class="dropdown text-end">
+          
+          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="login">Sign in</a></li>
+            
+           
+            <li><a class="dropdown-item" href="<?=ROOT?>/logout">log out</a></li>
+
+
+        <?php endif;?>
       </div>
     </div>
   </header>
